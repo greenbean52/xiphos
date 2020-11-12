@@ -52,9 +52,12 @@
 #define _see_captures_margin(depth)   (-100 * (depth))
 #define _h_score(depth)               (_sqr(_min(depth, 16)) * 32)
 
+search_settings_t search_settings;
+search_status_t search_status;
+
 const int lmp[][LMP_DEPTH + 1] = {
   { 0, 2, 3, 5, 9, 13, 18, 25, 34, 45, 55 },
-  { 0, 4, 5, 8, 13, 20, 29, 40, 54, 68, 83 }
+  { 0, 5, 6, 9, 14, 21, 30, 41, 55, 69, 84 }
 };
 
 int lmr[MAX_DEPTH][MAX_MOVES];
@@ -455,6 +458,15 @@ int pvs(search_data_t *sd, int root_node, int pv_node, int alpha, int beta,
       beta_cut = hash_score - depth;
       score = pvs(sd, 0, 0, beta_cut - 1, beta_cut, depth >> 1, ply, 0, move);
       if (score < beta_cut)
+        new_depth ++;
+    }
+    // cmh extension
+    else if (_m_is_quiet(move))
+    {
+      piece_pos = pos->board[_m_from(move)] * BOARD_SIZE + _m_to(move);
+      if (cmh_ptr[0] && cmh_ptr[1] &&
+          cmh_ptr[0][piece_pos] >= MAX_HISTORY_SCORE / 2 &&
+          cmh_ptr[1][piece_pos] >= MAX_HISTORY_SCORE / 2)
         new_depth ++;
     }
 

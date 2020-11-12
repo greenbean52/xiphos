@@ -21,7 +21,7 @@
 
 #include <inttypes.h>
 
-#define VERSION                      "Xiphos 0.5.4"
+#define VERSION                      "Xiphos 0.6.1"
 #define AUTHOR                       "Milos Tatarevic"
 
 #ifdef _BMI2
@@ -32,9 +32,10 @@
   #define ARCH                       "SSE"
 #endif
 
-#define MAX_THREADS                  128
+#define MAX_THREADS                  256
 #define DEFAULT_THREADS              1
 #define DEFAULT_HASH_SIZE_IN_MB      128
+#define MAX_HASH_SIZE_IN_MB          65536
 
 #define MAX_DEPTH                    100
 #define PLY_LIMIT                    128
@@ -62,6 +63,7 @@
 #define _min(a, b)                   ((a) < (b) ? (a) : (b))
 #define _abs(a)                      ((a) < 0 ? -(a) : (a))
 #define _sqr(a)                      ((a) * (a))
+#define _sign(a)                     ((a > 0) - (a < 0))
 
 #define _rank(sq)                    ((sq) >> 3)
 #define _file(sq)                    ((sq) & 0x7)
